@@ -54,7 +54,7 @@ cd juice-shop && npm install
 npm start
 ```
 
-> [!success] Application démarrée avec succès
+>  Application démarrée avec succès
 > - URL : `http://localhost:3000`
 > - Version détectée : **Juice Shop v2.1.0-dev**
 > - SGBD : **SQLite** (identifié lors du scan sqlmap)
@@ -146,7 +146,7 @@ OWASP ZAP a été configuré en proxy interceptant sur `localhost:8081`, avec Fi
 | Nouvelles alertes | **145 alertes détectées** |
 | Rapport généré | `2026-03-30-ZAP-Report-.html` |
 
-> [!warning] Alertes ZAP — catégories principales détectées
+>  Alertes ZAP — catégories principales détectées
 > - Injection SQL — paramètres non filtrés dans `/rest/`
 > - XSS réfléchi — champ de recherche sans encodage
 > - CSRF — absence de token anti-CSRF sur les formulaires POST
@@ -186,7 +186,7 @@ sqlmap -u "http://localhost:3000/rest/products/search?q=apple" \
 
 ![](attachments/SQLMAP.png)
 
-> [!success] sqlmap — Injection confirmée
+>  sqlmap — Injection confirmée
 > - Paramètre injectable : `q` (GET)
 > - Techniques : **boolean-based blind**, **time-based blind**
 > - Payload : `q=apple%' AND 9156=9156 AND 'oZfUN'='oZfUN`
@@ -245,7 +245,7 @@ db.query(`SELECT * FROM Products WHERE name LIKE '%${userInput}%'`)
 db.query('SELECT * FROM Products WHERE name LIKE ?', [`%${userInput}%`])
 ```
 
-> [!tip] Validation côté client = aucune protection
+>  Validation côté client = aucune protection
 > Toute validation JavaScript peut être contournée via les DevTools ou Burp Suite. Seules les **requêtes préparées côté serveur** protègent contre les injections SQL.
 
 ---
@@ -279,7 +279,7 @@ http://localhost:3000/#/search?q=%3Ciframe%20src%3D%22javascript:alert(`Mohamed%
 
 ![](attachments/XSS.png)
 
-> [!success] XSS confirmé
+>  XSS confirmé
 > Boîte de dialogue JavaScript affichée : **"Mohamed EL AAMRANI found XSS"**
 > Code exécuté dans le contexte de `localhost:3000`
 
@@ -337,9 +337,9 @@ L'endpoint `POST /profile` ne valide aucun token anti-CSRF. Une requête forgée
 
 **Étape 4 — Résultat côté serveur**
 
-![](attachments/CSRF solve.png)
+![](attachments/CSRF%20solve.png)
 
-> [!success] CSRF confirmé
+>  CSRF confirmé
 > Challenge résolu : **"Successfully solved a challenge: CSRF (Change the name of a user by performing CSRF from another origin)"**
 
 #### Déroulement de l'attaque
@@ -386,7 +386,7 @@ La fonctionnalité d'upload de photo de profil valide le type de fichier **uniqu
 
 **Requête normale — upload d'un fichier valide**
 
-![](attachments/normal upload.png)
+![](attachments/normal%20upload.png)
 
 **Modification du `Content-Type` dans Burp Suite**
 
@@ -395,13 +395,13 @@ Requête originale  : Content-Type: image/jpeg
 Requête modifiée   : Content-Type: application/pdf
 ```
 
-![](attachments/change the Conten-Type.png)
+![](attachments/change%20the%20Conten-Type.png)
 
 **Modification de l'extension du fichier**
 
-![](attachments/change extension.png)
+![](attachments/change%20extension.png)
 
-> [!success] Upload non-image accepté
+>  Upload non-image accepté
 > Le serveur accepte la requête malgré le type MIME non-image.
 > Aucune validation côté serveur du type réel du fichier.
 
@@ -466,11 +466,11 @@ Content-Type: application/pdf
 
 **Réponse du serveur**
 
-![](attachments/request of the fule uplad.png)
+![](attachments/request%20ofthe%20fule%20uplad.png)
 
-![](attachments/success uplaod.png)
+![](attachments/success%20uplaod.png)
 
-> [!success] Résultat — Challenge confirmé
+>  Résultat — Challenge confirmé
 > - Réponse code **204** obtenue pour la requête interceptée et modifiée via Burp
 > - Absence de validation de taille côté serveur confirmée
 > - La stack trace expose **Express ^4.22.1** et les chemins internes
@@ -519,7 +519,7 @@ app.use((err, req, res, next) => {
 
 ### 6.2 Principe fondamental
 
-> [!tip] Validation côté client vs côté serveur
+>  Validation côté client vs côté serveur
 > **Côté client (JavaScript)** = peut être contourné en quelques secondes avec les DevTools ou Burp Suite — ne protège **jamais** contre un attaquant.
 >
 > **Côté serveur** = seule protection fiable. Toutes les vulnérabilités de ce rapport exploitent l'absence de validation côté serveur.

@@ -71,19 +71,19 @@ npm start
 
 #### Page principale — `http://localhost:3000/#/`
 
-![[1.png]]
+![](attachments/1.png)
 
 #### Interface de connexion — `http://localhost:3000/#/login`
 
-![[2_Login.png]]
+![](attachments/2_Login.png)
 
 #### Interface d'inscription — `http://localhost:3000/#/register`
 
-![[Register.png]]
+![](attachments/Register.png)
 
 #### Mot de passe oublié — `http://localhost:3000/#/forgot-password`
 
-![[3_Foregepassword.png]]
+![](attachments/3_Foregepassword.png)
 
 ---
 
@@ -98,7 +98,7 @@ ffuf -w /usr/share/seclists/Discovery/Web-Content/directory-list-2.3-medium.txt 
      -u http://localhost:3000/FUZZ -ac -c -of csv -o results.csv
 ```
 
-![[attachments/FFUF.png]]
+![](attachments/attachments/FFUF.png)
 
 #### Résultats notables
 
@@ -121,7 +121,7 @@ cat results.csv | awk -F, 'NR>1 {print $2}' > urls.txt
 eyewitness --web -f urls.txt --no-prompt
 ```
 
-![[eyewitness.png]]
+![](attachments/eyewitness.png)
 
 > [!note] Résultats EyeWitness
 > - **92 URLs** traitées — rapport HTML généré : `report.html`
@@ -134,7 +134,7 @@ eyewitness --web -f urls.txt --no-prompt
 
 OWASP ZAP a été configuré en proxy interceptant sur `localhost:8081`, avec Firefox comme navigateur cible. Le scan actif complet (spider traditionnel + AJAX spider) a été lancé.
 
-![[ZAP scanner.png]]
+![](attachments/ZAP scanner.png)
 
 | Paramètre | Valeur |
 |---|---|
@@ -184,7 +184,7 @@ sqlmap -u "http://localhost:3000/rest/products/search?q=apple" \
        -p q --level=5 --risk=3 --batch --random-agent
 ```
 
-![[SQLMAP.png]]
+![](attachments/SQLMAP.png)
 
 > [!success] sqlmap — Injection confirmée
 > - Paramètre injectable : `q` (GET)
@@ -200,7 +200,7 @@ sqlmap -u "http://localhost:3000/rest/products/search?q=apple" \
        -p q --tables --batch
 ```
 
-![[tables.png]]
+![](attachments/tables.png)
 
 Tables extraites : `Users`, `Products`, `BasketItems`, `Wallets`, `Cards`, `SecurityAnswers`, `SecurityQuestions`, `Feedbacks`, `Complaints`, `Challenges`, `Deliveries`, `Addresses`, `Recycles`, `Memories`, `PrivacyRequests`, `Quantities`, `Hints`, `ImageCaptchas`, `Captchas`, `sqlite_sequence`
 
@@ -211,7 +211,7 @@ sqlmap -u "http://localhost:3000/rest/products/search?q=apple" \
        -p q -T Users --columns --batch
 ```
 
-![[User columns.png]]
+![](attachments/User columns.png)
 
 | Colonne | Type | Sensibilité |
 |---|---|---|
@@ -224,7 +224,7 @@ sqlmap -u "http://localhost:3000/rest/products/search?q=apple" \
 
 **Étape 4 — Dump complet de la table Users**
 
-![[Users table.png]]
+![](attachments/Users table.png)
 
 22 enregistrements extraits incluant l'administrateur (`admin@juice-sh.op`), les mots de passe hashés MD5 et les tokens d'authentification.
 
@@ -277,7 +277,7 @@ http://localhost:3000/#/search?q=%3Ciframe%20src%3D%22javascript:alert(`Mohamed%
 <iframe src="javascript:alert(`Mohamed EL AAMRANI found XSS`)">
 ```
 
-![[XSS.png]]
+![](attachments/XSS.png)
 
 > [!success] XSS confirmé
 > Boîte de dialogue JavaScript affichée : **"Mohamed EL AAMRANI found XSS"**
@@ -318,7 +318,7 @@ L'endpoint `POST /profile` ne valide aucun token anti-CSRF. Une requête forgée
 
 **Étape 1 — Requête légitime capturée dans Burp Suite**
 
-![[befor_CSRF.png]]
+![](attachments/befor_CSRF.png)
 
 **Étape 2 — Page HTML malveillante hébergée sur un domaine externe**
 
@@ -329,15 +329,15 @@ L'endpoint `POST /profile` ne valide aucun token anti-CSRF. Une requête forgée
 <script>document.forms[0].submit();</script>
 ```
 
-![[htmledit.png]]
+![](attachments/htmledit.png)
 
 **Étape 3 — Requête forgée envoyée automatiquement**
 
-![[after_CSRF.png]]
+![](attachments/after_CSRF.png)
 
 **Étape 4 — Résultat côté serveur**
 
-![[CSRF solve.png]]
+![](attachments/CSRF solve.png)
 
 > [!success] CSRF confirmé
 > Challenge résolu : **"Successfully solved a challenge: CSRF (Change the name of a user by performing CSRF from another origin)"**
@@ -386,7 +386,7 @@ La fonctionnalité d'upload de photo de profil valide le type de fichier **uniqu
 
 **Requête normale — upload d'un fichier valide**
 
-![[normal upload.png]]
+![](attachments/normal upload.png)
 
 **Modification du `Content-Type` dans Burp Suite**
 
@@ -395,11 +395,11 @@ Requête originale  : Content-Type: image/jpeg
 Requête modifiée   : Content-Type: application/pdf
 ```
 
-![[change the Conten-Type.png]]
+![](attachments/change the Conten-Type.png)
 
 **Modification de l'extension du fichier**
 
-![[change extension.png]]
+![](attachments/change extension.png)
 
 > [!success] Upload non-image accepté
 > Le serveur accepte la requête malgré le type MIME non-image.
@@ -442,13 +442,13 @@ L'interface impose une limite de taille **uniquement côté client**. En interce
 
 **Fichier utilisé : `big.pdf` — taille > 100 KB**
 
-![[bigfile.png]]
+![](attachments/bigfile.png)
 
 Cette capture montre le fichier `big.pdf` utilisé pour l'attaque, dont la taille dépasse 100KB. Ce fichier est volontairement choisi pour contourner la limitation côté client imposée par l'interface.
 
 **Requête `POST /file-upload` interceptée dans Burp Suite**
 
-![[past form a file.png]]
+![](attachments/past form a file.png)
 
 Cette capture présente la requête HTTP `POST /file-upload` interceptée via Burp Suite. On peut y observer le champ `multipart/form-data` contenant le fichier envoyé, ainsi que le contenu volumineux du fichier, modifié manuellement pour dépasser la limite autorisée côté client.
 
@@ -466,9 +466,9 @@ Content-Type: application/pdf
 
 **Réponse du serveur**
 
-![[request of the fule uplad.png]]
+![](attachments/request of the fule uplad.png)
 
-![[success uplaod.png]]
+![](attachments/success uplaod.png)
 
 > [!success] Résultat — Challenge confirmé
 > - Réponse code **204** obtenue pour la requête interceptée et modifiée via Burp
